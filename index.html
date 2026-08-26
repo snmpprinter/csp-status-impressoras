@@ -1,1 +1,30 @@
-<h1>Painel das Impressoras</h1>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel de Impressoras</title>
+
+  <!-- O Script deve vir AQUI, dentro do <head> -->
+  <script>
+    (function() {
+      // A senha criada é visitor02
+      var senhaCorreta = "visitor02"; 
+
+      var digitada = prompt("Digite a senha para visualizar o status das impressoras:");
+      if (digitada !== senhaCorreta) {
+        alert("Senha incorreta! Acesso negado.");
+        document.write("<div style='text-align:center; margin-top:50px; font-family:sans-serif;'><h2>Acesso Não Autorizado</h2></div>");
+        window.stop();
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- Os elementos visuais entram AQUI, dentro do <body> -->
+  <h1>Painel das Impressoras</h1>
+  
+  <!-- O restante da sua tabela ou status das impressoras vem aqui -->
+
+</body>
+</html>
