@@ -1,25 +1,52 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Painel de Impressoras</title>
-  <script>
-    (function() {
-      var senhaCorreta = "visitor02"; 
-
-      var digitada = prompt("Digite a senha para visualizar o status das impressoras:");
-      if (digitada !== senhaCorreta) {
-        alert("Senha incorreta! Acesso negado.");
-        document.write("<div style='text-align:center; margin-top:50px; font-family:sans-serif;'><h2>Acesso Não Autorizado</h2></div>");
-        window.stop();
-      }
-    })();
-  </script>
-</head>
+<html lang="pt-BR"><head><meta charset="UTF-8">
+<title>Status de Impressoras - PCSP (protegido)</title>
+<style>
+  body { background:#0A0A0A; color:#F0F0F0; font-family: 'Trebuchet MS', sans-serif;
+         display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
+  .box { text-align:center; }
+  input { background:#141414; border:1px solid #C9A84C; color:#F0F0F0;
+           padding:10px; font-size:14px; border-radius:6px; width:220px; }
+  button { background:#C9A84C; color:#0A0A0A; border:none; padding:10px 20px;
+            font-weight:bold; border-radius:6px; cursor:pointer; margin-left:8px; }
+  #err { color:#CC2222; margin-top:10px; font-size:12px; }
+</style></head>
 <body>
+<div class="box" id="gate">
+  <p style="color:#C9A84C;">🔒 Painel protegido - digite a senha</p>
+  <input type="password" id="pwd" placeholder="Senha">
+  <button onclick="tryDecrypt()">Entrar</button>
+  <div id="err"></div>
+</div>
+<script>
+const SALT  = "FjmWEWm0IjipcYXlceAG2A==";
+const NONCE = "s8Nt9OCcJEj7NDuH";
+const CT    = "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";
+const ITER  = 250000;
 
-  <h1>Painel das Impressoras</h1>
-  <!-- A partir daqui, o seu programa vai gerar os dados/tabelas das impressoras -->
+function b64d(s) { return Uint8Array.from(atob(s), c => c.charCodeAt(0)); }
 
-</body>
-</html>
+async function tryDecrypt() {
+  const pwd = document.getElementById("pwd").value;
+  const errEl = document.getElementById("err");
+  errEl.textContent = "";
+  try {
+    const enc = new TextEncoder();
+    const keyMaterial = await crypto.subtle.importKey(
+      "raw", enc.encode(pwd), {name: "PBKDF2"}, false, ["deriveKey"]);
+    const key = await crypto.subtle.deriveKey(
+      {name: "PBKDF2", salt: b64d(SALT), iterations: ITER, hash: "SHA-256"},
+      keyMaterial, {name: "AES-GCM", length: 256}, false, ["decrypt"]);
+    const plainBuf = await crypto.subtle.decrypt(
+      {name: "AES-GCM", iv: b64d(NONCE)}, key, b64d(CT));
+    const html = new TextDecoder().decode(plainBuf);
+    document.open(); document.write(html); document.close();
+  } catch (e) {
+    errEl.textContent = "Senha incorreta.";
+  }
+}
+document.getElementById("pwd").addEventListener("keyup", e => {
+  if (e.key === "Enter") tryDecrypt();
+});
+</script>
+</body></html>
